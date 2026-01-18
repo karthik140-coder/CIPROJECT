@@ -23,5 +23,13 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run Pytest
-        run: pytest
+      - name: Run Pytest with html report
+        run: |
+          mkdir -p reports
+          pytest --html=reports/report.html --self-contained-html
+
+      - name: Upload Pytest report
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-report
+          path: reports/
