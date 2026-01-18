@@ -8,8 +8,16 @@ on:
 jobs:
   run-tests:
     runs-on: ubuntu-latest
+    env:
+      BASE_URL: https://qa.example.com
+      BROWSER: chrome
 
     steps:
+      - name: Print environment variables
+        run: |
+          echo "BASE_URL=$BASE_URL"
+          echo "BROWSER=$BROWSER"
+          
       - name: Checkout repository
         uses: actions/checkout@v4
 
