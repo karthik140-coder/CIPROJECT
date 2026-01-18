@@ -2,22 +2,35 @@ name: Pytest CI
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Select Environment"
+        default: "qa"
+        required: true
+        type: choice
+        options:
+          - qa
+          - uat
+          - prod
 
 jobs:
   run-tests:
     runs-on: ubuntu-latest
     env:
-      BASE_URL: https://qa.example.com
+      ENV: $ {{ github.event.inputs.environment }}
       BROWSER: chrome
 
     steps:
-      - name: Print environment variables
-        run: |
-          echo "BASE_URL=$BASE_URL"
-          echo "BROWSER=$BROWSER"
-          
+
+      - name: Set BASE_URL
+        run: echo "BASE_URL=https://${{ ENV }}.example.com" >> $GITHUB_ENV
+
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
